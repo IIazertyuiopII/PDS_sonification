@@ -7,11 +7,12 @@
 ################################################################################
 import sys
 import time
+sys.path.append("C:\SONIFICATION_GESTE\pyosc-devel")
 import OSC
 import math
 import threading
-sys.path.append("C:\Users\IAZERTYUIOPI\Documents\maths\cours_pure_data\LeapMotion\LeapSDK\lib")
-sys.path.append("C:\Users\IAZERTYUIOPI\Documents\maths\cours_pure_data\LeapMotion\LeapSDK\lib\\x86")
+sys.path.append("C:\SONIFICATION_GESTE\LeapSDK\lib")
+sys.path.append("C:\SONIFICATION_GESTE\LeapSDK\lib\\x86")
 
 import Leap, thread, time
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
@@ -110,7 +111,7 @@ class SampleListener(Leap.Listener):
                         swipeDirection = "down";
                        
                 print "swipe "+swipeDirection+" occurred"                
-                self.sendMSG("events",["bang","swipe",swipeDirection])
+                self.sendMSG("bang",["events","swipe",swipeDirection])
 
             if gesture.type == Leap.Gesture.TYPE_KEY_TAP and not self.isTimerRunning:
                 keytap = KeyTapGesture(gesture)
