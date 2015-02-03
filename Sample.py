@@ -6,8 +6,10 @@
 # between Leap Motion and you, your company or other organization.             #
 ################################################################################
 import sys
+import time
 import OSC
 import math
+import threading
 sys.path.append("C:\Users\IAZERTYUIOPI\Documents\maths\cours_pure_data\LeapMotion\LeapSDK\lib")
 sys.path.append("C:\Users\IAZERTYUIOPI\Documents\maths\cours_pure_data\LeapMotion\LeapSDK\lib\\x86")
 
@@ -16,33 +18,35 @@ from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 
 
 class SampleListener(Leap.Listener):
-    finger_names = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
-    bone_names = ['Metacarpal', 'Proximal', 'Intermediate', 'Distal']
-    state_names = ['STATE_INVALID', 'STATE_START', 'STATE_UPDATE', 'STATE_END']
+    isTimerRunning = False;
+    isCircleComplete = True;
 
-    def sendMSG(self,route_1,content,route_2=None):
+    def startAsyncTimer(self,delay=0.3):
+        threading.Thread(target=wait, args=[self,delay], kwargs={}).start()   
+
+    def sendMSG(self,content,route_list):
 
         oscmsg = OSC.OSCMessage()
-        oscmsg.setAddress("/"+route_1)
-        if(route_2 is not None):
-            oscmsg.append("/"+route_2)
+        oscmsg.setAddress("/"+route_list[0])
+        for i in range(1,len(route_list)):
+            oscmsg.append("/"+route_list[i])
         oscmsg.append(content)
         self.client.send(oscmsg)
 
     def on_init(self, controller):
-
         print "############################Initalized############################"
         self.client = OSC.OSCClient()
         self.client.connect(('127.0.0.1', 5005))  
 
 
     def on_connect(self, controller):
-
         # Enable gestures
         controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE);
         controller.enable_gesture(Leap.Gesture.TYPE_KEY_TAP);
         controller.enable_gesture(Leap.Gesture.TYPE_SCREEN_TAP);
         controller.enable_gesture(Leap.Gesture.TYPE_SWIPE);
+        controllerSetup(controller)
+
 
     def on_disconnect(self, controller):
         print "############################Disconnected############################"
@@ -58,137 +62,94 @@ class SampleListener(Leap.Listener):
         # Get hands
 
         if len(frame.hands) == 0:
-            self.sendMSG("positionMain",-1)
+            self.sendMSG(-1,["positionMain"])
         else:
             hand = frame.hands[0]
 
-            handType = "Left hand" if hand.is_left else "Right hand"
-
             distance = math.sqrt(hand.palm_position[1]*hand.palm_position[1] + hand.palm_position[2]*hand.palm_position[2] + hand.palm_position[3]*hand.palm_position[3])
-            # print(distance)
-            self.sendMSG("positionMain",distance)
-
-            # Get the hand's normal vector and direction
-            normal = hand.palm_normal
-            direction = hand.direction
-
-            # Calculate the hand's pitch, roll, and yaw angles
-            # print "  pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (
-            #     direction.pitch * Leap.RAD_TO_DEG,
-            #     normal.roll * Leap.RAD_TO_DEG,
-            #     direction.yaw * Leap.RAD_TO_DEG)
-
-            # Get arm bone
-            arm = hand.arm
-            # print "  Arm direction: %s, wrist position: %s, elbow position: %s" % (
-            #     arm.direction,
-            #     arm.wrist_position,
-            #     arm.elbow_position)
-
-            # Get fingers
-            for finger in hand.fingers:
-
-                # print "    %s finger, id: %d, length: %fmm, width: %fmm" % (
-                #     self.finger_names[finger.type()],
-                #     finger.id,
-                #     finger.length,
-                #     finger.width)
-
-                # Get bones
-                for b in range(0, 4):
-                    bone = finger.bone(b)
-                    # print "      Bone: %s, start: %s, end: %s, direction: %s" % (
-                    #     self.bone_names[bone.type],
-                    #     bone.prev_joint,
-                    #     bone.next_joint,
-                    #     bone.direction)
-
-        # Get tools
-        # for tool in frame.tools:
-
-            # print "  Tool id: %d, position: %s, direction: %s" % (
-            #     tool.id, tool.tip_position, tool.direction)
+            self.sendMSG(distance,["positionMain"])
 
         # Get gestures
+
         for gesture in frame.gestures():
             if gesture.type == Leap.Gesture.TYPE_CIRCLE:
                 circle = CircleGesture(gesture)
 
-                if circle.state is Leap.Gesture.STATE_START:
-                    print "starting circle"
-                if circle.state is Leap.Gesture.STATE_UPDATE:
-                    print "updating circle"
-                if circle.state is Leap.Gesture.STATE_STOP:
-                    print "stopping circle"
-                    self.sendMSG("events","bang","circle")
-
                 # Determine clock direction using the angle between the pointable and the circle normal
                 if circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/2:
-                    clockwiseness = "clockwise"
+                    clockwiseness = "trigo"
                 else:
-                    clockwiseness = "counterclockwise"
+                    clockwiseness = "horaire"
 
-                # Calculate the angle swept since the last frame
-                swept_angle = 0
-                if circle.state != Leap.Gesture.STATE_START:
-                    previous_update = CircleGesture(controller.frame(1).gesture(circle.id))
-                    swept_angle =  (circle.progress - previous_update.progress) * 2 * Leap.PI
+                if circle.state is Leap.Gesture.STATE_START and self.isCircleComplete:
+                    print "starting circle "+clockwiseness
+                    self.isCircleComplete = False;
+                    self.sendMSG("bang",["events","circle",clockwiseness,"start"])
+                if circle.state is Leap.Gesture.STATE_STOP and not self.isCircleComplete:
+                    print "stopping circle "+clockwiseness
+                    self.isCircleComplete = True;
+                    self.sendMSG("bang",["events","circle",clockwiseness,"stop"])
 
-                # print "  Circle id: %d, %s, progress: %f, radius: %f, angle: %f degrees, %s" % (
-                #         gesture.id, self.state_names[gesture.state],
-                #         circle.progress, circle.radius, swept_angle * Leap.RAD_TO_DEG, clockwiseness)
+            if gesture.type == Leap.Gesture.TYPE_SWIPE and not self.isTimerRunning:
 
-            if gesture.type == Leap.Gesture.TYPE_SWIPE:
                 swipe = SwipeGesture(gesture)
-                if swipe.state is Leap.Gesture.STATE_START:
-                    print "starting swipe"
-                if swipe.state is Leap.Gesture.STATE_UPDATE:
-                    print "updating swipe"
-                if swipe.state is Leap.Gesture.STATE_STOP:
-                    print "stopping swipe"
-                    self.sendMSG("events","bang","swipe")
+                self.startAsyncTimer();
 
-                # print "  Swipe id: %d, state: %s, position: %s, direction: %s, speed: %f" % (
-                #         gesture.id, self.state_names[gesture.state],
-                #         swipe.position, swipe.direction, swipe.speed)
+                isHorizontal = abs(swipe.direction[0]) > abs(swipe.direction[1])
 
-            if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
+                if(isHorizontal):
+                    if(swipe.direction[0] > 0):
+                        swipeDirection = "right"
+                    else:
+                        swipeDirection = "left"
+                
+                else:
+                    if(swipe.direction[1] > 0):
+                        swipeDirection = "up";
+                    else:
+                        swipeDirection = "down";
+                       
+                print "swipe "+swipeDirection+" occurred"                
+                self.sendMSG("events",["bang","swipe",swipeDirection])
+
+            if gesture.type == Leap.Gesture.TYPE_KEY_TAP and not self.isTimerRunning:
                 keytap = KeyTapGesture(gesture)
-                if keytap.state is Leap.Gesture.STATE_STOP:
-                    print "keytap occurred"
-                # print "  Key Tap id: %d, %s, position: %s, direction: %s" % (
-                #         gesture.id, self.state_names[gesture.state],
-                #         keytap.position, keytap.direction )
+                self.startAsyncTimer();
+                print "keytap occurred"
+                self.sendMSG("bang",["events","keytap"])
 
-            if gesture.type == Leap.Gesture.TYPE_SCREEN_TAP:
+            if gesture.type == Leap.Gesture.TYPE_SCREEN_TAP and not self.isTimerRunning:
                 screentap = ScreenTapGesture(gesture)
-                if screentap.state is Leap.Gesture.STATE_STOP:
-                    print "screentap occurred"
-                # print "  Screen Tap id: %d, %s, position: %s, direction: %s" % (
-                #         gesture.id, self.state_names[gesture.state],
-                #         screentap.position, screentap.direction )
+                self.startAsyncTimer();
+                print "screentap occurred"
+                self.sendMSG("bang",["events","screentap"])
 
-        # if not (frame.hands.is_empty or frame.gestures().is_empty):
-        #     print "------------------------------------------------------------\n"
-
-    def state_string(self, state):
-        if state == Leap.Gesture.STATE_START:
-            return "STATE_START"
-
-        if state == Leap.Gesture.STATE_UPDATE:
-            return "STATE_UPDATE"
-
-        if state == Leap.Gesture.STATE_STOP:
-            return "STATE_STOP"
-
-        if state == Leap.Gesture.STATE_INVALID:
-            return "STATE_INVALID"
 
 
 def controllerSetup(c):
-    c.config.set("Gesture.Swipe.MinLength", 15.0)
-    c.config.set("Gesture.Swipe.MinVelocity", 500)
+    #Swipe
+    c.config.set("Gesture.Swipe.MinLength", 100.0)
+    c.config.set("Gesture.Swipe.MinVelocity", 1000)
+    #ScreenTap
+    c.config.set("Gesture.ScreenTap.MinForwardVelocity", 20.0)
+    c.config.set("Gesture.ScreenTap.HistorySeconds", .1)
+    c.config.set("Gesture.ScreenTap.MinDistance", 5.0)
+    #KeyTap
+    c.config.set("Gesture.KeyTap.MinDownVelocity", 20.0)
+    c.config.set("Gesture.KeyTap.HistorySeconds", .1)
+    c.config.set("Gesture.KeyTap.MinDistance", 5.0)
+    #Circle
+    c.config.set("Gesture.Circle.MinRadius", 20.0)
+    c.config.set("Gesture.Circle.MinArc", 1.5*Leap.PI)
+
     c.config.save()
+
+
+
+def wait(listener,delay):
+    listener.isTimerRunning=True;
+    time.sleep(delay) 
+    listener.isTimerRunning=False;
 
 def main():
     # Create a sample listener and controller
@@ -196,7 +157,6 @@ def main():
     controller = Leap.Controller()
 
     # Have the sample listener receive events from the controller
-    controllerSetup(controller)
     controller.add_listener(listener)
 
     # Keep this process running until Enter is pressed
