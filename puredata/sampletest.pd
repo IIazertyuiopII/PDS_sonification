@@ -76,7 +76,7 @@
 #X text 154 275 Envoi le pitch dans le sndsampler;
 #X obj 166 87 s vit;
 #X obj 277 399 vsl 20 80 60 100 0 0 empty empty empty 0 -9 0 10 -203904
--1 -1 1975 1;
+-1 -1 0 1;
 #X text 508 59 VITESSE;
 #N canvas 0 50 450 300 (subpatch) 0;
 #X array pitch_1 600 float 1;
@@ -207,19 +207,19 @@
 -1;
 #X text 562 551 pour prendre un son dans le dossier;
 #X obj 426 27 inlet;
-#X msg 370 494 open sounds/sample1.wav;
 #X obj 173 406 inlet;
 #X obj 217 405 inlet;
 #X obj 340 629 outlet~;
 #X obj 395 629 outlet~;
-#X connect 0 0 70 0;
+#X msg 370 494 open sounds/scribble.wav;
+#X connect 0 0 69 0;
 #X connect 1 0 57 0;
-#X connect 1 0 71 0;
+#X connect 1 0 70 0;
 #X connect 3 0 4 0;
 #X connect 4 0 7 0;
 #X connect 5 0 0 0;
 #X connect 5 1 1 0;
-#X connect 7 0 67 0;
+#X connect 7 0 71 0;
 #X connect 10 0 19 0;
 #X connect 11 0 10 0;
 #X connect 12 0 61 0;
@@ -234,7 +234,7 @@
 #X connect 41 0 46 0;
 #X connect 42 0 0 1;
 #X connect 42 0 1 1;
-#X connect 43 0 67 0;
+#X connect 43 0 71 0;
 #X connect 43 0 48 0;
 #X connect 46 0 42 0;
 #X connect 47 0 43 0;
@@ -246,6 +246,6 @@
 #X connect 63 0 5 0;
 #X connect 64 0 63 0;
 #X connect 66 0 34 0;
-#X connect 67 0 5 0;
-#X connect 68 0 46 0;
-#X connect 69 0 22 0;
+#X connect 67 0 46 0;
+#X connect 68 0 22 0;
+#X connect 71 0 5 0;
