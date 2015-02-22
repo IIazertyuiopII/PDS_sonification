@@ -1,4 +1,4 @@
-#N canvas 0 0 1600 818 10;
+#N canvas -8 -8 1600 818 10;
 #X declare -lib mrpeach;
 #X obj 11 16 import mrpeach;
 #X obj 762 34 udpreceive 5005;
@@ -11,7 +11,7 @@
 #X obj 933 169 route /circle;
 #X obj 1265 349 route /keytap;
 #X obj 1401 352 route /screentap;
-#N canvas 728 119 687 537 swipe 1;
+#N canvas 728 119 687 537 swipe 0;
 #X obj 240 16 inlet;
 #X obj 137 103 route /up;
 #X obj 409 104 route /right;
@@ -48,7 +48,7 @@
 #X connect 14 0 7 0;
 #X connect 14 1 8 0;
 #X restore 546 227 pd swipe;
-#N canvas 286 50 1255 723 circle 0;
+#N canvas 286 50 1255 723 circle 1;
 #X obj 483 204 route /trigo;
 #X obj 671 212 route /horaire;
 #X obj 412 319 route /start;
@@ -63,7 +63,7 @@
 #X obj 740 517 *~ 1.5;
 #X obj 796 515 *~ 1.5;
 #X obj 547 401 delay 700;
-#X msg 547 442 open sounds/cloche.wav;
+#X msg 547 442 open sounds/staple.wav;
 #X obj 660 477 f 0.1;
 #X obj 483 404 r tval;
 #X obj 602 503 play;
@@ -71,6 +71,7 @@
 #X obj 412 451 cercle;
 #X obj 740 449 cercle;
 #X msg 740 383 1;
+#X obj 609 469 b;
 #X connect 0 0 2 0;
 #X connect 0 0 4 0;
 #X connect 1 0 3 0;
@@ -86,8 +87,8 @@
 #X connect 11 0 7 0;
 #X connect 12 0 9 0;
 #X connect 13 0 14 0;
-#X connect 14 0 15 0;
 #X connect 14 0 17 0;
+#X connect 14 0 22 0;
 #X connect 15 0 17 1;
 #X connect 16 0 14 0;
 #X connect 17 0 7 0;
@@ -98,6 +99,7 @@
 #X connect 20 0 11 0;
 #X connect 20 1 12 0;
 #X connect 21 0 20 0;
+#X connect 22 0 15 0;
 #X restore 933 228 pd circle;
 #X obj 217 273 sampletest;
 #X msg 90 119 0;
@@ -140,7 +142,7 @@
 #X obj 1348 474 f 0.1;
 #X obj 1119 355 r tval;
 #X obj 1348 443 b;
-#X msg 1306 414 open sounds/cloche.wav;
+#X msg 1306 414 open sounds/staple.wav;
 #X text 74 554 0 : papier 1 : mécanique;
 #X obj 43 397 loadbang;
 #X msg 141 120 85;
