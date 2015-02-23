@@ -1,9 +1,9 @@
-#N canvas 80 15 1546 763 10;
-#X obj 342 601 *~;
-#X obj 380 601 *~;
-#X text 453 421 FICHIER SAMPLE;
-#X obj 370 390 receive fromGUI;
-#X obj 370 418 list trim;
+#N canvas 400 30 912 691 10;
+#X obj 342 529 *~;
+#X obj 380 529 *~;
+#X text 453 349 FICHIER SAMPLE;
+#X obj 370 318 receive fromGUI;
+#X obj 370 346 list trim;
 #N canvas 759 137 702 353 sndsampler 0;
 #X obj 193 142 expr 44100 / $f1;
 #X obj 193 171 phasor~;
@@ -56,28 +56,28 @@
 #X connect 22 0 21 0;
 #X connect 24 0 27 0;
 #X connect 27 0 22 0;
-#X restore 370 559 pd sndsampler;
-#X text 386 540 SAMPLING;
-#X obj 370 440 route /sample1;
-#X text 377 475 on selectionne et on envoie;
-#X text 482 389 reception des données;
-#X obj 156 225 line~;
-#X msg 156 200 \$1 100;
-#X obj 52 118 tgl 30 0 empty empty empty 17 7 0 10 -261682 -1 -1 1
-1;
-#X obj 51 96 loadbang;
-#X text 58 74 ON/OFF;
-#X obj 169 36 hsl 200 25 0 30 0 0 empty vit0 empty -2 -8 0 10 -262144
+#X restore 370 487 pd sndsampler;
+#X text 386 468 SAMPLING;
+#X obj 370 368 route /sample1;
+#X text 377 403 on selectionne et on envoie;
+#X text 482 317 reception des données;
+#X obj 156 153 line~;
+#X msg 156 128 \$1 100;
+#X obj 52 46 tgl 30 0 empty empty empty 17 7 0 10 -261682 -1 -1 1 1
+;
+#X obj 51 24 loadbang;
+#X text 58 2 ON/OFF;
+#X obj 169 -36 hsl 200 25 0 30 0 0 empty vit0 empty -2 -8 0 10 -262144
 -1 -1 3317 1;
-#X floatatom 166 66 5 0 0 0 - - -;
-#X text 163 18 Pour simuler la variable à piloter;
-#X obj 157 151 r vit;
-#X obj 156 251 s~ pitch;
-#X text 154 275 Envoi le pitch dans le sndsampler;
-#X obj 166 87 s vit;
-#X obj 277 399 vsl 20 80 60 100 0 0 empty empty empty 0 -9 0 10 -203904
+#X floatatom 166 -6 5 0 0 0 - - -;
+#X text 163 -54 Pour simuler la variable à piloter;
+#X obj 157 79 r vit;
+#X obj 156 179 s~ pitch;
+#X text 154 203 Envoi le pitch dans le sndsampler;
+#X obj 166 15 s vit;
+#X obj 277 327 vsl 20 80 60 100 0 0 empty empty empty 0 -9 0 10 -203904
 -1 -1 0 1;
-#X text 508 59 VITESSE;
+#X text 508 -13 VITESSE;
 #N canvas 0 50 874 392 (subpatch) 0;
 #X array pitch_1 600 float 1;
 #A 0 0.0420717 0.0420717 0.0420717 0.0420717 0.0420717 0.0420717 0.0420717
@@ -161,65 +161,65 @@
 0.342074 0.342074 0.342074 0.342074 0.346836 0.351597 0.356359 0.356359
 0.356359;
 #X coords 0 2 599 0 200 140 1 0 0;
-#X restore 479 140 graph;
-#X text 534 283 10;
-#X text 600 283 20;
-#X text 663 283 30;
-#X text 481 277 0;
-#X text 467 265 0;
-#X text 469 199 1;
-#X text 468 133 2;
-#X text 473 110 CONTROLE PITCH;
-#X obj 477 30 hsl 200 25 0 30 0 0 empty empty empty -2 -8 0 10 -262144
+#X restore 479 68 graph;
+#X text 534 211 10;
+#X text 600 211 20;
+#X text 663 211 30;
+#X text 481 205 0;
+#X text 467 193 0;
+#X text 469 127 1;
+#X text 468 61 2;
+#X text 473 38 CONTROLE PITCH;
+#X obj 477 -42 hsl 200 25 0 30 0 0 empty empty empty -2 -8 0 10 -262144
 -1 -1 0 1;
-#X floatatom 474 60 5 0 0 0 - - -;
-#X text 471 12 Pour simuler la variable à piloter;
-#X obj 475 81 s vit2;
-#X text 478 -1 MAPPING PAR TABLEAU (Courbes);
-#X floatatom 238 209 5 0 0 0 - - -;
-#X text 238 224 Pitch;
-#X floatatom 642 116 5 0 0 2 Pitch pitch1 -;
-#X obj 277 491 dbtorms;
-#X obj 277 546 line~;
-#X obj 324 434 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X floatatom 474 -12 5 0 0 0 - - -;
+#X text 471 -60 Pour simuler la variable à piloter;
+#X obj 475 9 s vit2;
+#X text 478 -73 MAPPING PAR TABLEAU (Courbes);
+#X floatatom 238 137 5 0 0 0 - - -;
+#X text 238 152 Pitch;
+#X floatatom 642 44 5 0 0 2 Pitch pitch1 -;
+#X obj 277 419 dbtorms;
+#X obj 277 474 line~;
+#X obj 324 362 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X text 475 299 MOFIFIER LA COURBE AVEC LA FLECHE;
-#X text 196 151 recoit l'info vitesse (curseur ou device);
-#X msg 277 519 \$1 50;
-#X obj 309 413 loadbang;
-#X msg 309 465 90;
-#X text 239 379 NIVEAU SORTIE;
-#X text 178 1 MAPPING PAR FONCTION;
-#X obj 158 176 expr log10(($f1)+1);
-#X text 262 367 comment;
-#X text 335 367 LE MEME SAMPLER POUR LES DEUX CONTROLES;
-#X text 283 188 Pitch = F(Vit);
-#X text 282 173 Mapping par fonction;
-#X text 476 492 choix son placé dans le repertoire;
-#X obj 481 541 env~;
-#X floatatom 482 572 5 0 0 0 - - -;
-#X obj 322 543 vline~;
-#X msg 322 518 1 500 0;
-#X msg 52 153 \; pd dsp \$1;
-#X msg -13 153 \; vit0 5 \;;
-#X obj 636 568 openpanel;
-#X obj 636 522 bng 30 250 50 0 empty bg4 empty 20 8 0 8 -159808 -1
+#X text 475 227 MOFIFIER LA COURBE AVEC LA FLECHE;
+#X text 196 79 recoit l'info vitesse (curseur ou device);
+#X msg 277 447 \$1 50;
+#X obj 309 341 loadbang;
+#X msg 309 393 90;
+#X text 239 307 NIVEAU SORTIE;
+#X text 178 -71 MAPPING PAR FONCTION;
+#X obj 158 104 expr log10(($f1)+1);
+#X text 262 295 comment;
+#X text 335 295 LE MEME SAMPLER POUR LES DEUX CONTROLES;
+#X text 283 116 Pitch = F(Vit);
+#X text 282 101 Mapping par fonction;
+#X text 476 420 choix son placé dans le repertoire;
+#X obj 481 469 env~;
+#X floatatom 482 500 5 0 0 0 - - -;
+#X obj 322 471 vline~;
+#X msg 322 446 1 500 0;
+#X msg 52 81 \; pd dsp \$1;
+#X msg -13 81 \; vit0 5 \;;
+#X obj 636 496 openpanel;
+#X obj 636 450 bng 30 250 50 0 empty bg4 empty 20 8 0 8 -159808 -1
 -1;
-#X text 562 551 pour prendre un son dans le dossier;
-#X obj 426 27 inlet;
-#X obj 173 406 inlet;
-#X obj 217 405 inlet;
-#X obj 340 629 outlet~;
-#X obj 395 629 outlet~;
-#X msg 370 494 open sounds/scribble.wav;
-#X connect 0 0 69 0;
+#X text 562 479 pour prendre un son dans le dossier;
+#X obj 426 -45 inlet;
+#X obj 173 334 inlet;
+#X obj 217 333 inlet;
+#X msg 370 422 open sounds/scribble.wav;
+#X obj 342 584 throw~ sonG;
+#X obj 380 560 throw~ sonD;
+#X connect 0 0 70 0;
 #X connect 1 0 57 0;
-#X connect 1 0 70 0;
+#X connect 1 0 71 0;
 #X connect 3 0 4 0;
 #X connect 4 0 7 0;
 #X connect 5 0 0 0;
 #X connect 5 1 1 0;
-#X connect 7 0 71 0;
+#X connect 7 0 69 0;
 #X connect 10 0 19 0;
 #X connect 11 0 10 0;
 #X connect 12 0 61 0;
@@ -234,7 +234,7 @@
 #X connect 41 0 46 0;
 #X connect 42 0 0 1;
 #X connect 42 0 1 1;
-#X connect 43 0 71 0;
+#X connect 43 0 69 0;
 #X connect 43 0 48 0;
 #X connect 46 0 42 0;
 #X connect 47 0 43 0;
@@ -248,5 +248,5 @@
 #X connect 66 0 34 0;
 #X connect 67 0 46 0;
 #X connect 68 0 22 0;
-#X connect 71 0 5 0;
-#X coords 0 763 1 762 200 140 0;
+#X connect 69 0 5 0;
+#X coords 0 691 1 690 200 140 0;
