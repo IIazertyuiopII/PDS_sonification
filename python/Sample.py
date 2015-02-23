@@ -92,7 +92,7 @@ class SampleListener(Leap.Listener):
             if gesture.type == Leap.Gesture.TYPE_SWIPE and not self.isTimerRunning:
 
                 swipe = SwipeGesture(gesture)
-                velocity = swipe.speed
+                velocity = distance(hand.palm_velocity,[0,0,0])
 
                 isHorizontal = abs(swipe.direction[0]) > abs(swipe.direction[1])
 
