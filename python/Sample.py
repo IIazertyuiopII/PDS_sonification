@@ -12,6 +12,7 @@ import math
 import threading
 import Leap
 
+from VirtualScreen import VirtualScreen
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 
 
@@ -36,7 +37,8 @@ class SampleListener(Leap.Listener):
     def on_init(self, controller):
         print "############################Initalized############################"
         self.client = OSC.OSCClient()
-        self.client.connect(('127.0.0.1', 5005))  
+        self.client.connect(('127.0.0.1', 5005)) 
+        self.Vscreen =  VirtualScreen()
 
 
     def on_connect(self, controller):
@@ -63,9 +65,12 @@ class SampleListener(Leap.Listener):
 
         if len(frame.hands) == 0:
             self.sendMSG(-1,["positionMain"])
+            return
         else:
             hand = frame.hands[0]
-            self.sendMSG(distance(hand.palm_position,[0,0,0]),["positionMain"])
+            self.sendMSG(distance3d(hand.palm_position,[0,0,0]),["positionMain"])
+            #print self.Vscreen.isFacingTheScreen(hand.palm_position)
+
 
         # Get gestures
 
@@ -92,7 +97,7 @@ class SampleListener(Leap.Listener):
             if gesture.type == Leap.Gesture.TYPE_SWIPE and not self.isTimerRunning:
 
                 swipe = SwipeGesture(gesture)
-                velocity = distance(hand.palm_velocity,[0,0,0])
+                velocity = distance3d(hand.palm_velocity,[0,0,0])
 
                 isHorizontal = abs(swipe.direction[0]) > abs(swipe.direction[1])
 
@@ -158,7 +163,7 @@ def controllerSetup(c):
 
     c.config.save()
 
-def distance(a,b):
+def distance3d(a,b):
     ans=0
     for i in range(0,2):
         ans += (a[i]-b[i])*(a[i]-b[i])
