@@ -1,6 +1,6 @@
 class VirtualScreen: #cet ecran est normal a l'axe Z du Leap
 	
-	def __init__(self,Xoffset=0,Yoffset=50,Zoffset=-50,length=200,height=200): #en mm
+	def __init__(self,Xoffset=0,Yoffset=50,Zoffset=-50,length=300,height=200): #en mm
 		
 		self.Xoffset = Xoffset; # position du milieu du bord bas de l'ecran par rapport au centre du Leap
 		self.Yoffset = Yoffset; # position du milieu du bord bas de l'ecran par rapport au centre du Leap

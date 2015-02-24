@@ -1,4 +1,4 @@
-#N canvas 0 0 1362 691 10;
+#N canvas 62 32 1472 691 10;
 #X declare -lib mrpeach;
 #X obj 11 16 import mrpeach;
 #X obj 762 34 udpreceive 5005;
@@ -48,7 +48,7 @@
 #X connect 12 0 13 0;
 #X connect 12 1 14 0;
 #X restore 546 227 pd swipe;
-#N canvas 62 17 1255 691 circle 0;
+#N canvas 62 17 1255 691 circle 1;
 #X obj 483 204 route /trigo;
 #X obj 671 212 route /horaire;
 #X obj 412 319 route /start;
@@ -61,7 +61,7 @@
 #X obj 740 517 *~ 1.5;
 #X obj 796 515 *~ 1.5;
 #X obj 547 401 delay 700;
-#X msg 547 442 open sounds/staple.wav;
+#X msg 547 442 open sounds/cloche.wav;
 #X obj 660 477 f 0.1;
 #X obj 483 404 r tval;
 #X msg 412 381 0;
@@ -98,8 +98,6 @@
 #X connect 17 1 10 0;
 #X connect 18 0 17 0;
 #X connect 19 0 13 0;
-#X connect 22 0 20 0;
-#X connect 22 0 21 0;
 #X restore 933 228 pd circle;
 #X obj 217 273 sampletest;
 #X msg 90 119 0;
@@ -142,7 +140,7 @@
 #X obj 1348 474 f 0.1;
 #X obj 1119 355 r tval;
 #X obj 1348 443 b;
-#X msg 1306 414 open sounds/staple.wav;
+#X msg 1306 414 open sounds/cloche.wav;
 #X text 74 554 0 : papier 1 : mécanique;
 #X obj 43 397 loadbang;
 #X msg 141 120 85;

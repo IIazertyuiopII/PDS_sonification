@@ -26,6 +26,7 @@ class SampleListener(Leap.Listener):
             vitesse = finger.tip_velocity.to_float_array()
             direction = finger.direction.to_float_array()
 
+            # print self.Vscreen.isFacingTheScreen(position)
             print self.Vscreen.getScreenZonePointedAt(position,direction)
         
             # print position
