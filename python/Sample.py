@@ -18,9 +18,15 @@ from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 
 
 class SampleListener(Leap.Listener):
-    isTimerRunning = False;
-    isCircleComplete = True;
+    
+    isTimerRunning = False;     
+    
+    isCircleComplete = True;    #gestures events management
     isSwipeComplete = True;
+
+    isEnteringZone = False;     #zone management
+    isInZone = False;
+
 
     def startAsyncTimer(self,delay=0.3):
         threading.Thread(target=wait, args=[self,delay], kwargs={}).start()   
@@ -59,17 +65,62 @@ class SampleListener(Leap.Listener):
     def on_frame(self, controller):
         frame = controller.frame()
 
-        # print  "Gestes reconnus : %d" % (len(frame.gestures()))                
-
-        # Get hands
-
-        if len(frame.hands) == 0:
-            self.sendMSG(-1,["positionMain"])
+        if len(frame.hands) == 0:   #si l'utilisateur n'est pas devant la Leap
+            #print "retournez devant la Leap plx"
+            self.sendMSG(-1,["positionMain","distance"])
             return
         else:
+            finger = None
             hand = frame.hands[0]
-            self.sendMSG(distance3d(hand.palm_position,[0,0,0]),["positionMain"])
-            #print self.Vscreen.isFacingTheScreen(hand.palm_position)
+            self.sendMSG(self.Vscreen.distanceFromScreen(hand.palm_position),["positionMain","distance"])
+            
+            for i in hand.fingers:
+                if(i.type()==1):
+                    finger=i
+                    break
+
+            if finger is None :     #si l'index de l'utilisateur n'est pas visible mais qu'il est devant la Leap
+                #print "index non detecte"
+                self.sendMSG(-1,["positionMain","distance"])
+                self.isInZone = False
+                self.isEnteringZone = False
+                return
+            else:
+                position = finger.tip_position.to_float_array()
+                #vitesse = finger.tip_velocity.to_float_array()
+                #direction = finger.direction.to_float_array()
+
+            handFacesScreen = self.Vscreen.isFacingTheScreen(hand.palm_position)
+            fingerFacesScreen = self.Vscreen.isFacingTheScreen(position)
+
+            if(handFacesScreen^fingerFacesScreen and not self.isTimerRunning): #en train d'entrer dans la zone
+                if( (not self.isEnteringZone) and (not self.isInZone)):
+                    self.sendMSG("bang",["positionMain","debutentree"])
+                    # print "debutentree"
+                    self.startAsyncTimer()
+                if( (not self.isEnteringZone) and (self.isInZone) ):
+                    self.sendMSG("bang",["positionMain","debutsortie"])
+                    # print "debutsortie"
+                    self.isSwipeComplete = True
+                    self.startAsyncTimer()
+                self.isEnteringZone = True
+                self.isInZone = False
+
+            if(fingerFacesScreen and handFacesScreen and not self.isTimerRunning): #dans la zone
+                if( (not self.isInZone) ):
+                    self.sendMSG("bang",["positionMain","entree"])
+                    # print "entree"
+                    self.startAsyncTimer()
+                self.isInZone = True
+                self.isEnteringZone = False
+            
+            if( (not fingerFacesScreen) and (not handFacesScreen) and not self.isTimerRunning): #completement hors de la zone
+                if( (self.isEnteringZone) or (self.isInZone) ):
+                    self.sendMSG("bang",["positionMain","sortie"])
+                    # print "sortie"
+                    self.startAsyncTimer()
+                self.isInZone = False
+                self.isEnteringZone = False            
 
 
         # Get gestures
