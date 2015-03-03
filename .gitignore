@@ -1,3 +1,5 @@
 patch_psa/
 "Neural Netw"/mnist.pkl
 "Neural Netw"/mnist.pkl.gz
+*.reapaks
+*.pyc
