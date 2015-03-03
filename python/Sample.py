@@ -96,11 +96,11 @@ class SampleListener(Leap.Listener):
             if(handFacesScreen^fingerFacesScreen and not self.isTimerRunning): #en train d'entrer dans la zone
                 if( (not self.isEnteringZone) and (not self.isInZone)):
                     self.sendMSG("bang",["positionMain","debutentree"])
-                    # print "debutentree"
+                    print "debutentree"
                     self.startAsyncTimer()
                 if( (not self.isEnteringZone) and (self.isInZone) ):
                     self.sendMSG("bang",["positionMain","debutsortie"])
-                    # print "debutsortie"
+                    print "debutsortie"
                     self.isSwipeComplete = True
                     self.startAsyncTimer()
                 self.isEnteringZone = True
@@ -109,7 +109,7 @@ class SampleListener(Leap.Listener):
             if(fingerFacesScreen and handFacesScreen and not self.isTimerRunning): #dans la zone
                 if( (not self.isInZone) ):
                     self.sendMSG("bang",["positionMain","entree"])
-                    # print "entree"
+                    print "entree"
                     self.startAsyncTimer()
                 self.isInZone = True
                 self.isEnteringZone = False
@@ -167,13 +167,12 @@ class SampleListener(Leap.Listener):
                 if swipe.state is Leap.Gesture.STATE_START and self.isSwipeComplete:
                     self.isSwipeComplete = False
                     print "swipe "+swipeDirection+" occurred"                
-                    self.sendMSG("bang",["events","swipe",swipeDirection])
+                    self.sendMSG(velocity,["events","swipe",swipeDirection])
 
                 if swipe.state is Leap.Gesture.STATE_UPDATE:
                     if self.isSwipeComplete:
                         self.isSwipeComplete = False
-                print "swipe speed : %d" % (velocity)
-                self.sendMSG(velocity,["events","swipe","speed"])
+                # print "swipe speed : %d" % (velocity)
 
                 if swipe.state is Leap.Gesture.STATE_STOP and not self.isSwipeComplete:
                     print "swipe stopped"
