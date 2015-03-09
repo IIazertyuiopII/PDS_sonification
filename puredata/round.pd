@@ -1,0 +1,14 @@
+#N canvas 462 214 450 300 10;
+#X obj 134 4 inlet;
+#X obj 133 145 fromsymbol;
+#X floatatom 75 162 5 0 0 0 - - -;
+#X symbolatom 180 113 10 0 0 0 - - -;
+#X obj 134 88 makefilename %.1f;
+#X text 245 71 number of decimal places;
+#X text 244 85 see printf c reference;
+#X obj 132 238 outlet;
+#X connect 0 0 4 0;
+#X connect 1 0 2 0;
+#X connect 1 0 7 0;
+#X connect 3 0 1 0;
+#X connect 4 0 3 0;
