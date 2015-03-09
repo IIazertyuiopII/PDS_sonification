@@ -72,7 +72,6 @@ class SampleListener(Leap.Listener):
         else:
             finger = None
             hand = frame.hands[0]
-            self.sendMSG(self.Vscreen.distanceFromScreen(hand.palm_position),["positionMain","distance"])
             
             for i in hand.fingers:
                 if(i.type()==1):
@@ -89,6 +88,8 @@ class SampleListener(Leap.Listener):
                 position = finger.tip_position.to_float_array()
                 #vitesse = finger.tip_velocity.to_float_array()
                 #direction = finger.direction.to_float_array()
+                self.sendMSG(self.Vscreen.distanceFromScreen(hand.palm_position),["positionMain","distance"])
+
 
             handFacesScreen = self.Vscreen.isFacingTheScreen(hand.palm_position)
             fingerFacesScreen = self.Vscreen.isFacingTheScreen(position)
@@ -96,7 +97,7 @@ class SampleListener(Leap.Listener):
             if(handFacesScreen^fingerFacesScreen and not self.isTimerRunning): #en train d'entrer dans la zone
                 if( (not self.isEnteringZone) and (not self.isInZone)):
                     self.sendMSG("bang",["positionMain","debutentree"])
-                    print "debutentree"
+                    # print "debutentree"
                     self.startAsyncTimer()
                 if( (not self.isEnteringZone) and (self.isInZone) ):
                     self.sendMSG("bang",["positionMain","debutsortie"])
@@ -109,7 +110,7 @@ class SampleListener(Leap.Listener):
             if(fingerFacesScreen and handFacesScreen and not self.isTimerRunning): #dans la zone
                 if( (not self.isInZone) ):
                     self.sendMSG("bang",["positionMain","entree"])
-                    print "entree"
+                    # print "entree"
                     self.startAsyncTimer()
                 self.isInZone = True
                 self.isEnteringZone = False
