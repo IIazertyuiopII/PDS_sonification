@@ -1,4 +1,4 @@
-#N canvas 86 67 888 464 10;
+#N canvas 592 92 888 464 10;
 #X obj 224 212 readsf~;
 #X msg 182 176 1;
 #X obj 223 262 pan_can2test;
@@ -20,9 +20,16 @@
 #X obj 642 195 pack;
 #X obj 664 163 f 250;
 #X obj 583 144 f;
+#X obj 79 303 r vol_circ;
+#X obj 222 370 throw~ sonG;
+#X obj 292 371 throw~ sonD;
+#X obj 222 320 *~ 1;
+#X obj 292 320 *~ 1;
 #X connect 0 0 2 0;
 #X connect 0 0 2 1;
 #X connect 1 0 0 0;
+#X connect 2 0 23 0;
+#X connect 2 1 24 0;
 #X connect 3 0 4 0;
 #X connect 3 0 11 0;
 #X connect 3 0 5 0;
@@ -47,3 +54,7 @@
 #X connect 17 0 16 0;
 #X connect 18 0 17 1;
 #X connect 19 0 17 0;
+#X connect 20 0 23 1;
+#X connect 20 0 24 1;
+#X connect 23 0 21 0;
+#X connect 24 0 22 0;

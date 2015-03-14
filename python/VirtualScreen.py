@@ -15,6 +15,8 @@ class VirtualScreen: #cet ecran est normal a l'axe Z du Leap
 
 		self.UpperLeftCorner = [Xoffset-length/float(2),Yoffset+height]
 
+		self.Center = [self.Xoffset,self.Yoffset+0.5*self.height,Zoffset+0.5*Zlimit]
+
 		self.zoneUpperLeftCornerArray = [];
 		self.zoneHeight = height / float(2);
 		self.zoneLength = length / float(3);

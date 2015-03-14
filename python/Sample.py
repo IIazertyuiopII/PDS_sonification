@@ -89,7 +89,7 @@ class SampleListener(Leap.Listener):
                 #vitesse = finger.tip_velocity.to_float_array()
                 #direction = finger.direction.to_float_array()
                 self.sendMSG(self.Vscreen.distanceFromScreen(hand.palm_position),["positionMain","distance"])
-
+                # self.sendMSG(distance3d(self.Vscreen.Center,hand.palm_position),["positionMain","distance"])
 
             handFacesScreen = self.Vscreen.isFacingTheScreen(hand.palm_position)
             fingerFacesScreen = self.Vscreen.isFacingTheScreen(position)

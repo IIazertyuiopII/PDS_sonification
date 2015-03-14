@@ -1,4 +1,4 @@
-#N canvas 79 22 963 615 10;
+#N canvas 274 43 963 615 10;
 #X obj 362 122 expr ($f1*$f2/2)-$f2/4;
 #X obj 511 98 f 3.14159;
 #X text 578 99 pi;
@@ -22,6 +22,8 @@
 -1;
 #X obj 285 60 inlet~;
 #X obj 207 463 delay_test;
+#X obj 206 511 outlet~;
+#X obj 263 514 outlet~;
 #X connect 0 0 5 0;
 #X connect 0 0 6 0;
 #X connect 0 0 18 0;
@@ -41,3 +43,5 @@
 #X connect 17 0 4 0;
 #X connect 19 0 1 0;
 #X connect 20 0 12 0;
+#X connect 21 0 22 0;
+#X connect 21 1 23 0;
