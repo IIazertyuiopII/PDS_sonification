@@ -11,3 +11,6 @@
 
 <h2> Commentaires </h2>
 * Si quelque chose ne marche pas let me know !
+
+<h2> Résumé </h2>
+* Réalisation d'une interface sonore pour LeapMotion, afin de faciliter l'apprentissage de gestes.
